@@ -2,7 +2,6 @@ import 'package:UTS/homescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:UTS/transaction.dart';
 import 'package:UTS/user.dart';
-import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
