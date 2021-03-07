@@ -1,4 +1,4 @@
-# tradeapp
+# UTS
 
 A new Flutter project.
 
