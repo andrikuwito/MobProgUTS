@@ -29,8 +29,8 @@ class _homeState extends State<home> {
   int _selectedIndex = 0;
   final List page = [
     Homescreen(),
-    Users(),
-    Transaction()
+    Transaction(),
+    Users()
   ];
     void _onItemTapped(int index){
     setState(() {
