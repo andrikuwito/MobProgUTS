@@ -1,4 +1,5 @@
 import 'package:UTS/homescreen.dart';
+import 'package:UTS/search.dart';
 import 'package:flutter/material.dart';
 import 'package:UTS/transaction.dart';
 import 'package:UTS/user.dart';
@@ -15,22 +16,23 @@ class MyApp extends StatelessWidget {
       home: home()
     );
   }
-
 }
 
-
-
 class home extends StatefulWidget {
+  // const home({Key key, this.stock}) : super(key: key);
   @override
   _homeState createState() => _homeState();
+  // final stock;
 }
 
 class _homeState extends State<home> {
   int _selectedIndex = 0;
-  final List page = [
+  
+  final List<Widget> page = [
     Homescreen(),
+    Transaction(),
+    Search(),
     Users(),
-    Transaction()
   ];
     void _onItemTapped(int index){
     setState(() {
@@ -43,29 +45,63 @@ class _homeState extends State<home> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('TRAPP')
+        title: Text('TRAPP'),
       ),
-      body: page[ _selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items:[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+            backgroundColor: Colors.blue
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.note_add_sharp),
-            label: 'Transaction',
+            label: 'Portfolio',
+            backgroundColor: Colors.blue
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+            backgroundColor: Colors.blue
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.supervised_user_circle),
             label: 'User',
+            backgroundColor: Colors.blue
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Colors.white,
         onTap: _onItemTapped,
-
       ),
+      body: IndexedStack(
+        index:_selectedIndex,
+        children:page),
     );
   }
+}
+
+class stockSearch extends SearchDelegate<String>{
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return[
+        IconButton(icon: Icon(Icons.clear), onPressed:(){query='';})
+      ];
+    }
+
+    @override
+    Widget buildLeading(BuildContext context) {
+      return IconButton(icon: Icon(Icons.arrow_back), onPressed: (){close(context, null);});
+    }
+  
+    @override
+    Widget buildResults(BuildContext context) {
+      return Text("BLOK");
+    }
+  
+    @override
+    Widget buildSuggestions(BuildContext context) {
+      return Text("BLEK");
+  }
+
 }
