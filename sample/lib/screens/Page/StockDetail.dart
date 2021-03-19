@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:bezier_chart/bezier_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_sparkline/flutter_sparkline.dart';
@@ -26,9 +25,7 @@ class _stockdetailState extends State<stockdetail> {
   List<double> chart3 = [];
   Future<void> chart() async {
     var symbol = lowercase(widget.saham['nama']);
-    String Url =
-        "https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=M&from=1600651390&to=2021243390&token=c12t6dv48v6oi2531ibg";
-    var api = await http.get(Url);
+    var api = await http.get(Uri.parse('https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=M&from=1600651390&to=2021243390&token=c12t6dv48v6oi2531ibg'));
     if (api.statusCode == 200) {
       var stockapi = jsonDecode(api.body);
       var x = {"data": stockapi['c']};

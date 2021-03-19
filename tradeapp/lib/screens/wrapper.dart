@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sample/models/user.dart';
-import 'package:sample/screens/bottomNav.dart';
+import 'package:tradeapp/models/user.dart';
+import 'package:tradeapp/screens/bottomNav.dart';
 import 'Page/Home.dart';
 import 'sign/Authenticate.dart';
 import 'package:provider/provider.dart';

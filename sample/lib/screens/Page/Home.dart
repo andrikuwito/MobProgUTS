@@ -1,12 +1,16 @@
-import 'dart:convert';
-import 'package:UTS/stockdetails.dart';
+import 'package:sample/screens/Page/StockDetail.dart';
+import 'package:sample/screens/Page/User.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sample/services/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
 import 'package:http/http.dart'as http;
 // import 'main.dart';
 
-class Homescreen extends StatefulWidget {
+class Home extends StatefulWidget {
   @override
-  _HomescreenState createState() => _HomescreenState();
+  _HomeState createState() => _HomeState();
 }
 
 String changesymbol(String s) {
@@ -17,7 +21,7 @@ String lowercase(String s) {
   return '${s.toLowerCase()}';
 }
 
-class _HomescreenState extends State<Homescreen> {
+class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
@@ -28,8 +32,7 @@ class _HomescreenState extends State<Homescreen> {
   List allstock=[];
   
   Future<void>stocks()async{
-    String Url="https://finnhub.io/api/v1/stock/symbol?exchange=JK&token=c12t6dv48v6oi2531ibg";
-    var api = await http.get(Url);
+    var api = await http.get(Uri.parse('https://finnhub.io/api/v1/stock/symbol?exchange=JK&token=c12t6dv48v6oi2531ibg'));
     if(api.statusCode==200){
       var stock=json.decode(api.body);
       setState(() {
@@ -38,10 +41,8 @@ class _HomescreenState extends State<Homescreen> {
     }
     for(int i=0;i<10;i++){
       var harga=lowercase(saham[i]['symbol']);
-      String Urlharga="https://finnhub.io/api/v1/quote?symbol=${harga}&token=c12t6dv48v6oi2531ibg";
-      String UrlChart="https://finnhub.io/api/v1/stock/candle?symbol=${harga}&resolution=D&from=1600651390&to=2021243390&token=c12t6dv48v6oi2531ibg";
-      var hargaapi = await http.get(Urlharga);
-      var chartapi = await http.get(UrlChart);
+      var hargaapi = await http.get(Uri.parse('https://finnhub.io/api/v1/quote?symbol=${harga}&token=c12t6dv48v6oi2531ibg'));
+      var chartapi = await http.get(Uri.parse('https://finnhub.io/api/v1/stock/candle?symbol=${harga}&resolution=D&from=1600651390&to=2021243390&token=c12t6dv48v6oi2531ibg'));
       if(hargaapi.statusCode==200){
         var stockharga=json.decode(hargaapi.body);
         var chartsaham=json.decode(chartapi.body);

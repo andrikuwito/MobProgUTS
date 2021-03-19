@@ -1,6 +1,6 @@
 {
-    "name": "tradeapp",
-    "short_name": "tradeapp",
+    "name": "sample",
+    "short_name": "sample",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
