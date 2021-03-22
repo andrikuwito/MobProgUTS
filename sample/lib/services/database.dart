@@ -15,13 +15,7 @@ class DatabaseService{
     return;
   }
 
-  Future updateUserData (String name, String email, String uid) async{
-    return await userCollection.doc(uid).set({'name': name, 'email': email});
-  }
-
   Stream<QuerySnapshot> get users{
     return userCollection.snapshots();
-  }
-
-  
+  }  
 }

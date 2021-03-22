@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_sparkline/flutter_sparkline.dart';
+import 'package:sample/screens/Page/Transaction.dart';
+import 'package:sample/services/database2.dart';
 
 String lowercase(String s) {
   return '${s.toLowerCase()}';
@@ -20,6 +22,7 @@ class _stockdetailState extends State<stockdetail> {
     super.initState();
     this.chart();
   }
+
 
   List chart2 = [];
   List<double> chart3 = [];
@@ -41,17 +44,23 @@ class _stockdetailState extends State<stockdetail> {
   }
 
   buyAlertBox(BuildContext context) {
-    TextEditingController custom = TextEditingController();
+    TextEditingController _jumlah = TextEditingController();
+    var _kode = widget.saham['nama'];
+    var _deskripsi = widget.saham['description'];
+  
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: Text(widget.saham['nama']),
             content: TextField(
-                controller: custom, keyboardType: TextInputType.number),
+                controller: _jumlah, keyboardType: TextInputType.number),
             actions: <Widget>[
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder:(context)=>Transaction()));
+                  DatabaseService2().addPortofolio(_kode, _deskripsi, int.parse(_jumlah.text));
+                },
                 child: Text('BUY'),
               ),
             ],
@@ -112,9 +121,9 @@ class _stockdetailState extends State<stockdetail> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    buyAlertBox(context);
+                    buyAlertBox(context,);
                   },
-                  child: Text('BUY'),
+                  child: Text('BUY',),
                 ),
                 ElevatedButton(
                   onPressed: () {},

@@ -14,7 +14,6 @@ class bottomNav extends StatefulWidget {
 class _bottomNavState extends State<bottomNav> {
   
   int _selectedIndex = 0;
-  
   final List<Widget> page = [
     Home(),
     Transaction(),
@@ -45,18 +44,13 @@ class _bottomNavState extends State<bottomNav> {
             backgroundColor: Colors.blue
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-            backgroundColor: Colors.blue
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.supervised_user_circle),
             label: 'User',
             backgroundColor: Colors.blue
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
+        selectedItemColor: Colors.cyan,
         onTap: _onItemTapped,
       ),
       body: IndexedStack(
