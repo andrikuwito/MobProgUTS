@@ -1,11 +1,7 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sample/screens/Page/User.dart';
-import 'package:sample/services/auth.dart';
-
 import 'Page/Home.dart';
-import 'Page/Search.dart';
 import 'Page/Transaction.dart';
 
 class bottomNav extends StatefulWidget {
@@ -22,7 +18,6 @@ class _bottomNavState extends State<bottomNav> {
   final List<Widget> page = [
     Home(),
     Transaction(),
-    Search(),
     Users(),
   ];
     void _onItemTapped(int index){
