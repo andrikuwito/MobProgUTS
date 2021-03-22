@@ -116,7 +116,6 @@ class _SignInState extends State<SignIn> {
                 onPressed: () async {
                 try{
                   setState(() => loading = true);
-                  print('anjing');
                   if (_form.currentState.validate()){
                     setState(() => loading = true);
                     dynamic result = await _authService.signInWithEmailAndPassword(email, password);

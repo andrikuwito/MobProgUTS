@@ -13,7 +13,6 @@ class Search extends StatelessWidget {
       ),
     );
   }
-
 }
 
   class stocksearch extends SearchDelegate<String>{
