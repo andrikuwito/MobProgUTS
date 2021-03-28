@@ -52,7 +52,7 @@ class _stockdetailState extends State<stockdetail> {
 
   sellAlertBox(BuildContext context) {
     TextEditingController _jumlah = TextEditingController();
-
+    print(hasil);
     var _kode = widget.saham['nama'];
     var _deskripsi = widget.saham['description'];
     var _price = widget.saham['price'];
@@ -67,50 +67,91 @@ class _stockdetailState extends State<stockdetail> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
+                    for (int i = 0; i < porto.length; i++) {
+                      if (porto[i]['kode'] == _kode) {
+                        hasil = porto[i]['jumlah'];
+                        break;
+                      }
+                    }
                     if (hasil != null) {
-                      hasil = hasil - int.parse(_jumlah.text);
-                      porto.clear();
-                      FirebaseFirestore.instance
-                          .collection('portofolio')
-                          .where('uid', isEqualTo: _authService.getCurrentUID())
-                          .get()
-                          .then((value) {
+                      if (hasil < int.parse(_jumlah.text)) {
+                        final snackBar = SnackBar(
+                            content: Text('Stock Cuma ada ' +
+                               hasil.toString()));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                      else {
+                        if(hasil == int.parse(_jumlah.text)){
+                           FirebaseFirestore.instance
+                            .collection('portofolio')
+                            .where('uid',
+                                isEqualTo: _authService.getCurrentUID())
+                            .get()
+                            .then((value) {
+                          FirebaseFirestore.instance
+                              .collection('portofolio')
+                              .where('kode', isEqualTo: _kode)
+                              .get()
+                              .then((value) {
+                            value.docs.forEach((element) {
+                              FirebaseFirestore.instance
+                                  .collection('portofolio')
+                                  .doc(element.id)
+                                  .delete()
+                                  .then((value) {});
+                            });
+                          });
+                        });
+                        }
+                        else{
+                          hasil = hasil - int.parse(_jumlah.text);
+                        porto.clear();
                         FirebaseFirestore.instance
                             .collection('portofolio')
-                            .where('kode', isEqualTo: _kode)
+                            .where('uid',
+                                isEqualTo: _authService.getCurrentUID())
+                            .get()
+                            .then((value) {
+                          FirebaseFirestore.instance
+                              .collection('portofolio')
+                              .where('kode', isEqualTo: _kode)
+                              .get()
+                              .then((value) {
+                            value.docs.forEach((element) {
+                              FirebaseFirestore.instance
+                                  .collection('portofolio')
+                                  .doc(element.id)
+                                  .delete()
+                                  .then((value) {
+                                DatabaseService2().addPortofolio(_kode,
+                                    _deskripsi, int.parse(_price), hasil);
+                              });
+                            });
+                          });
+                        });
+                        FirebaseFirestore.instance
+                            .collection('balance')
+                            .where('uid',
+                                isEqualTo: _authService.getCurrentUID())
                             .get()
                             .then((value) {
                           value.docs.forEach((element) {
                             FirebaseFirestore.instance
-                                .collection('portofolio')
+                                .collection('balance')
                                 .doc(element.id)
                                 .delete()
                                 .then((value) {
-                              DatabaseService2().addPortofolio(
-                                  _kode, _deskripsi, int.parse(_price), hasil);
+                              DatabaseService3().addBalance(balance +
+                                  int.parse(_jumlah.text) * int.parse(_price));
                             });
                           });
                         });
-                      });
-                      FirebaseFirestore.instance
-                          .collection('balance')
-                          .where('uid', isEqualTo: _authService.getCurrentUID())
-                          .get()
-                          .then((value) {
-                        value.docs.forEach((element) {
-                          FirebaseFirestore.instance
-                              .collection('balance')
-                              .doc(element.id)
-                              .delete()
-                              .then((value) {
-                            DatabaseService3().addBalance(balance +
-                                int.parse(_jumlah.text) * int.parse(_price));
-                          });
-                        });
-                      });
+                        }
+
+                        
+                      }
                     }
                   });
-
                   Navigator.pop(context);
                 },
                 child: Text('SELL'),
@@ -122,7 +163,6 @@ class _stockdetailState extends State<stockdetail> {
 
   buyAlertBox(BuildContext context) {
     TextEditingController _jumlah = TextEditingController();
-
     var _kode = widget.saham['nama'];
     var _deskripsi = widget.saham['description'];
     var _price = widget.saham['price'];
@@ -137,6 +177,12 @@ class _stockdetailState extends State<stockdetail> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
+                    for (int i = 0; i < porto.length; i++) {
+                      if (porto[i]['kode'] == _kode) {
+                        hasil = porto[i]['jumlah'];
+                        break;
+                      }
+                    }
                     if (hasil == null) {
                       if (balance <
                           (int.parse(_jumlah.text) * int.parse(_price))) {
@@ -144,7 +190,8 @@ class _stockdetailState extends State<stockdetail> {
                             SnackBar(content: Text('Balance limited'));
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         print("ey");
-                      } else {
+                      } 
+                      else {
                         DatabaseService2().addPortofolio(_kode, _deskripsi,
                             int.parse(_price), int.parse(_jumlah.text));
                         hasil = int.parse(_jumlah.text);
@@ -167,8 +214,10 @@ class _stockdetailState extends State<stockdetail> {
                           });
                         });
                       }
+                      Navigator.pop(context);
                       porto.clear();
-                    } else {
+                    } 
+                    else {
                       hasil = hasil + int.parse(_jumlah.text);
                       porto.clear();
                       FirebaseFirestore.instance
@@ -195,7 +244,8 @@ class _stockdetailState extends State<stockdetail> {
                       });
                       if (balance <
                           (int.parse(_jumlah.text) * int.parse(_price))) {
-                        final snackBar =SnackBar(content: Text('Balance limited'));
+                        final snackBar =
+                            SnackBar(content: Text('Balance limited'));
                         Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         print("ey");
@@ -259,6 +309,7 @@ class _stockdetailState extends State<stockdetail> {
           'price': doc['price']
         };
         porto.add(x);
+        print(porto);
       });
     });
     FirebaseFirestore.instance
@@ -270,6 +321,7 @@ class _stockdetailState extends State<stockdetail> {
         balance = doc['balance'];
       });
     });
+
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.fromLTRB(30, 50, 30, 0),
