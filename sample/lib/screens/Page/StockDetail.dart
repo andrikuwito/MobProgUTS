@@ -279,7 +279,6 @@ class _stockdetailState extends State<stockdetail> {
           );
         });
   }
-
   @override
   Widget build(BuildContext context) {
     if (chart3?.isEmpty ?? true) {
